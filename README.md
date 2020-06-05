@@ -21,7 +21,7 @@ only valid for SNV signatures and in 2018 extedended to allow also the analysis
 of INDEL mutational sigantures. The general approach is as follows:
 
 1.
-  *The SNVs are categorized by their nucleotide exchange. In total there are 
+  * The SNVs are categorized by their nucleotide exchange. In total there are 
   `4 x 3 = 12` different nucleotide exchanges, but if summing over reverse 
   complements only `12 / 2 = 6` different categories are left. For every SNV 
   detected, the motif context around the position of the SNV is extracted. This 
@@ -33,7 +33,7 @@ of INDEL mutational sigantures. The general approach is as follows:
   called **features** in the following text. The number of features will be 
   called `n`.
   
-  *The INDELs are categorized bt their insertion and deletion and the immediate
+  * The INDELs are categorized bt their insertion and deletion and the immediate
   sequence context. In total there are 83 differnet categories, features. In total
   there are 47 delition freatures and 36 inserion freatures. For each INDEL the 
   sequence context is extracted and the number of motive repetition determined. 
