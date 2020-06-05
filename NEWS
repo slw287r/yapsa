@@ -1,0 +1,23 @@
+  CHANGES IN VERSION 1.13.3
+
+This is a stable version after several important changes.
+
+* 95% Confidence intervals for exposures to mutational signatures can be 
+    computed
+* Analysis of the PCAWG mutational signatures is supported, both for PCAWG 
+    SNV and PCAWG Indel signatures
+
+The vignettes have been substantially changed:
+
+* new vignettes have been written for the new features confidence intervals 
+    and Indel signatures
+* new vignettes were added for features already present in the package before,
+    especially the optimal signature-specific cutoffs
+* the topic of stratifiec analyses of mutational signatures was taken out of 
+    the main vignette and now is described in a vignette on its own.
+
+================================
+
+  CHANGES IN VERSION 0.99.0
+
++ first version to be submitted to Bioconductor

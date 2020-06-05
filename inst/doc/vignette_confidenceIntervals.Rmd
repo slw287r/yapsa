@@ -1,0 +1,342 @@
+---
+title: "3. Confidence Intervals"
+author: "Daniel Huebschmann"
+date: "30/12/2019"
+vignette: >
+  %\VignetteIndexEntry{3. Confidence Intervals}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}  
+output: 
+  BiocStyle::html_document:
+    toc: yes
+
+references:
+- author:
+  - family: Alexandrov
+    given: LB
+  - family: Nik-Zainal
+    given: S
+  - family: Wedge
+    given: DC
+  - family: Aparicio
+    given: SA
+  - family: Behjati
+    given: S
+  - family: Biankin
+    given: AV
+  - family: Bignell
+    given: GR
+  - family: Bolli
+    given: N
+  - family: Borg
+    given: A
+  - family: Borresen-Dale
+    given: AL
+  - family: Boyault
+    given: S
+  - family: Burkhardt
+    given: B
+  - family: Butler
+    given: AP
+  - family: Caldas
+    given: C
+  - family: Davies
+    given: HR
+  - family: Desmedt
+    given: C
+  - family: Eils
+    given: R
+  - family: Eyfjörd
+    given: JE
+  - family: Greaves
+    given: M
+  - family: Hosoda
+    given: F
+  - family: Hutter
+    given: B
+  - family: Ilicic
+    given: T
+  - family: Imbeaud
+    given: S
+  - family: Imielinski
+    given: M
+  - family: Jäger
+    given: N
+  - family: Jones
+    given: DT
+  - family: Jones
+    given: D
+  - family: Knappskog
+    given: S
+  - family: Kool
+    given: M
+  - family: Lakhani
+    given: SR
+  - family: Lopez-Otin
+    given: C
+  - family: Martin
+    given: S
+  - family: Munshi
+    given: NC
+  - family: Nakamura
+    given: H
+  - family: Northcott
+    given: PA
+  - family: Pajic
+    given: M
+  - family: Papaemmanuil
+    given: E
+  - family: Paradiso
+    given: A
+  - family: Pearson
+    given: JV
+  - family: Puente
+    given: XS
+  - family: Raine
+    given: K
+  - family: Ramakrishna
+    given: M
+  - family: Richardson
+    given: AL
+  - family: Richter
+    given: J
+  - family: Rosenstiel
+    given: P
+  - family: Schlesner
+    given: M
+  - family: Schumacher
+    given: TN
+  - family: Span
+    given: PN
+  - family: Teague
+    given: JW
+  - family: Tokoti
+    given: Y
+  - family: Tutt
+    given: AN
+  - family: Valdes-Mas
+    given: R
+  - family: van Buuren
+    given: MM
+  - family: van't Veer
+    given: L
+  - family: Vincent-Salomon
+    given: A
+  - family: Waddell
+    given: N
+  - family: Yates
+    given: LR
+  - family: Australian Pancreatic Cancer Initiative
+    given: 
+  - family: ICGC Breast Cancer Consortium
+    given: 
+  - family: ICGC MMML-Seq Consortium
+    given: 
+  - family: ICGC PedBrain
+    given: 
+  - family: Zucman-Rossi
+    given: J
+  - family: Futreal
+    given: PA
+  - family: McDermott
+    given: U
+  - family: Lichter
+    given: P
+  - family: Meyerson
+    given: M
+  - family: Grimmond
+    given: SM
+  - family: Siebert
+    given: R
+  - family: Campo
+    given: E
+  - family: Shibata
+    given: T
+  - family: Pfister
+    given: SM
+  - family: Campbell
+    given: PJ
+  - family: Stratton
+    given: MR
+  container-title: Nature
+  id: Alex2013
+  issued:
+    month: 08
+    volume: 500
+    year: 2013
+  publisher: Nature Publishing Group
+  title: 'Signatures of Mutational Processes in Cancer'
+- author:
+  - family: Raue
+    given: Andreas
+  - family: Kreutz 
+    given: C.
+  - family: Maiwald 
+    given: T.
+  - family: Bachmann 
+    given: J.
+  - family: Schilling
+    given: M.
+  - family: Klingmüller
+    given: U.
+  - family: Timmer
+    given: J.
+  container-title: Bioinformatics
+  id: Raue_Bioinformatics2009
+  issued:
+      year: 2009
+  title: >
+    'Structural and practical identifiability analysis of partially observed 
+    dynamical models by exploiting the profile likelihood.'
+---
+
+```{r load_style, warning=FALSE, echo=FALSE, message=FALSE, results="hide"}
+library(BiocStyle)
+```
+
+```{r packages, include=FALSE}
+library(YAPSA)
+library(Biostrings)
+library(BSgenome.Hsapiens.UCSC.hg19)
+library(knitr)
+opts_chunk$set(echo=TRUE)
+opts_chunk$set(fig.show='asis')
+```
+
+# Introduction: Confidence Intervals {#introduction}
+
+In order to assess confidence in the setting of modeling in ordinary 
+differential equations (ODEs), the concept of 
+profile likelihood was introduced [@Raue_Bioinformatics2009]. In YAPSA, this 
+concept was adapted to the computation of confidence intervals (CIs) for the 
+exposures to mutational signatures (@Alex2013). To determine the CI for a 
+computed single value in a high-dimensional vector, this value is perturbed and 
+the remaining values of the vector are computed again, yielding an alternative 
+data model with one degree of freedom less than the initial model. Then, 
+log-likelihoods are computed from the distribution of the residuals of the 
+initial and the alternative model and a likelihood ratio test is being computed.
+
+In the context of mutational signatures, this corresponds to the determination 
+of the CI for the exposure of one given mutational signature exposure. To this 
+end, this exposure value is perturbed, i.e., $H_{uv}$, the exposure to 
+signature $u$ in sample $v$, is changed by a small value 
+$H_{uv} \rightarrow H_{uv} + \epsilon_{uv}$, and the exposures to the remaining 
+signatures are computed again by non-negative least squares, yielding an 
+alternative data model with one degree of freedom less than the initial model. 
+Then, as described above, log-likelihoods are computed from the distribution of 
+the residuals of the initial and the alternative model and a likelihood ratio 
+test is being computed. This yields a p-value for the perturbation, which may 
+need to be extrapolated by a Gauss-Newton method to yield 95% CIs.
+
+
+# Recap: compute signature exposures
+
+In the following section, we briefly recapitulate the analysis of SNV 
+mutational signatures on an example data set as performed in 
+[1. Usage of YAPSA](http://bioconductor.org/packages/3.11/bioc/vignettes/YAPSA/inst/doc/YAPSA.html).
+We thus first load the example data stored in the package:
+
+```{r, load_stored_sig_data}
+data(sigs)
+data(cutoffs)
+data("lymphomaNature2013_mutCat_df")
+current_cutoff_vector <- cutoffCosmicValid_abs_df[6,]
+```
+
+We then perform a supervised analysis of SNV mutational signatures using 
+[signature-specific cutoffs](http://bioconductor.org/packages/3.11/bioc/vignettes/YAPSA/inst/doc/vignette_signature_specific_cutoffs.html):
+
+```{r LCD with cutoffs}
+lymphoma_COSMIC_listsList <-
+  LCD_complex_cutoff_combined(
+      in_mutation_catalogue_df = lymphomaNature2013_mutCat_df,
+      in_cutoff_vector = current_cutoff_vector, 
+      in_signatures_df = AlexCosmicValid_sig_df, 
+      in_sig_ind_df = AlexCosmicValid_sigInd_df)
+```
+
+We assign subgroups to the different samples:
+
+```{r subrgroup annotation}
+data(lymphoma_PID)
+colnames(lymphoma_PID_df) <- "SUBGROUP"
+lymphoma_PID_df$PID <- rownames(lymphoma_PID_df)
+COSMIC_subgroups_df <- 
+  make_subgroups_df(lymphoma_PID_df,
+                    lymphoma_COSMIC_listsList$cohort$exposures)
+```
+
+And finally plot the obtained result:
+
+```{r caption_exposures, echo=FALSE}
+cap <- "Exposures to SNV mutational signatures"
+```
+
+```{r exposures_cutoffs, warning=FALSE, fig.width=8, fig.height=6, fig.cap= cap}
+exposures_barplot(
+  in_exposures_df = lymphoma_COSMIC_listsList$cohort$exposures,
+  in_signatures_ind_df = lymphoma_COSMIC_listsList$cohort$out_sig_ind_df,
+  in_subgroups_df = COSMIC_subgroups_df)               
+```
+
+
+# Compute the confidence intervals
+
+In order to assess trustworthiness of the computed exposures, YAPSA provides 
+the calculation of CIs. Analogously to CIs for SNV 
+mutational signatures, the CIs for Indel mutational signatures are computed 
+using the concept of profile likelihood. This is performed by the function 
+`variateExp()`. 
+
+```{r caption_CI, echo=FALSE}
+cap <- "Confidence interval calculation for exposures to Indel mutational 
+        signatures"
+```
+
+```{r compute_CI, echo=TRUE, warning=FALSE}
+complete_df <- variateExp(
+  in_catalogue_df = lymphomaNature2013_mutCat_df,
+  in_sig_df = lymphoma_COSMIC_listsList$cohort$signatures,
+  in_exposures_df = lymphoma_COSMIC_listsList$cohort$exposures,
+  in_sigLevel = 0.025, in_delta = 0.4)
+```
+
+Of note and as opposed to the output of the `LCD` function family, the result
+of the function `variateExp()` is a data frame in a *long* format, because for 
+every combination of a signature and a sample, several values now have to be 
+stored:
+
+```{r display_complete_df, echo=TRUE, warning=FALSE}
+head(complete_df, 12)
+```
+
+Here, the column `exposure` contains the values which had been computed before. 
+The columms `relLower` and `relUpper` contain the factors with which to 
+multiply the exposures in order to get the lower and upper bounds of the 95% 
+CIs. The absolute values of these lower and upper bounds are stored in the 
+columns `lower` and `upper`.
+
+There also is a custom function to plot exposures with confidence intervals:
+
+```{r plot_CI, echo=TRUE, warning=FALSE, fig.width=17, fig.height=15, fig.cap=cap}
+plotExposuresConfidence(
+  in_complete_df = complete_df, 
+  in_subgroups_df = COSMIC_subgroups_df,
+  in_sigInd_df = lymphoma_COSMIC_listsList$cohort$out_sig_ind_df)
+```
+
+This produces a figure similar to the display of exposures obtained above, but 
+in contrast to this former way of displaying signature exposures by stacked 
+barplots, here we chose a facet plot with the signatures as rows in order to be 
+able to display the CIs, which are indicated as whiskers. We furthermore would 
+like to emphasize that if a signature is not present in a sample, i.e., the 
+exposure to that signature is 0, then the upper and lower bounds of the 
+confidence interval are zero as well.
+
+Of note, the functionality to compute 95% CIs for signature exposures is also 
+available for the analysis of Indel mutational signatures, an example is 
+provided in the 
+[corresponding vignette](http://bioconductor.org/packages/3.11/bioc/vignettes/YAPSA/inst/doc/vignettes_Indel.html).
+
+
+# References 

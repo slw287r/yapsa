@@ -1,0 +1,490 @@
+---
+title: "6. Usage of YAPSA for Whole Exome Sequencing (WES) data"
+author: "Daniel Huebschmann"
+date: "06/03/2020"
+vignette: >
+  %\VignetteIndexEntry{6. Usage of YAPSA for WES data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}  
+output:
+  BiocStyle::html_document:
+    toc: yes
+references:
+- author:
+  - family: Alexandrov
+    given: LB
+  - family: Nik-Zainal
+    given: S
+  - family: Wedge
+    given: DC
+  - family: Aparicio
+    given: SA
+  - family: Behjati
+    given: S
+  - family: Biankin
+    given: AV
+  - family: Bignell
+    given: GR
+  - family: Bolli
+    given: N
+  - family: Borg
+    given: A
+  - family: Borresen-Dale
+    given: AL
+  - family: Boyault
+    given: S
+  - family: Burkhardt
+    given: B
+  - family: Butler
+    given: AP
+  - family: Caldas
+    given: C
+  - family: Davies
+    given: HR
+  - family: Desmedt
+    given: C
+  - family: Eils
+    given: R
+  - family: Eyfjörd
+    given: JE
+  - family: Greaves
+    given: M
+  - family: Hosoda
+    given: F
+  - family: Hutter
+    given: B
+  - family: Ilicic
+    given: T
+  - family: Imbeaud
+    given: S
+  - family: Imielinski
+    given: M
+  - family: Jäger
+    given: N
+  - family: Jones
+    given: DT
+  - family: Jones
+    given: D
+  - family: Knappskog
+    given: S
+  - family: Kool
+    given: M
+  - family: Lakhani
+    given: SR
+  - family: Lopez-Otin
+    given: C
+  - family: Martin
+    given: S
+  - family: Munshi
+    given: NC
+  - family: Nakamura
+    given: H
+  - family: Northcott
+    given: PA
+  - family: Pajic
+    given: M
+  - family: Papaemmanuil
+    given: E
+  - family: Paradiso
+    given: A
+  - family: Pearson
+    given: JV
+  - family: Puente
+    given: XS
+  - family: Raine
+    given: K
+  - family: Ramakrishna
+    given: M
+  - family: Richardson
+    given: AL
+  - family: Richter
+    given: J
+  - family: Rosenstiel
+    given: P
+  - family: Schlesner
+    given: M
+  - family: Schumacher
+    given: TN
+  - family: Span
+    given: PN
+  - family: Teague
+    given: JW
+  - family: Tokoti
+    given: Y
+  - family: Tutt
+    given: AN
+  - family: Valdes-Mas
+    given: R
+  - family: van Buuren
+    given: MM
+  - family: van't Veer
+    given: L
+  - family: Vincent-Salomon
+    given: A
+  - family: Waddell
+    given: N
+  - family: Yates
+    given: LR
+  - family: Australian Pancreatic Cancer Initiative
+    given: 
+  - family: ICGC Breast Cancer Consortium
+    given: 
+  - family: ICGC MMML-Seq Consortium
+    given: 
+  - family: ICGC PedBrain
+    given: 
+  - family: Zucman-Rossi
+    given: J
+  - family: Futreal
+    given: PA
+  - family: McDermott
+    given: U
+  - family: Lichter
+    given: P
+  - family: Meyerson
+    given: M
+  - family: Grimmond
+    given: SM
+  - family: Siebert
+    given: R
+  - family: Campo
+    given: E
+  - family: Shibata
+    given: T
+  - family: Pfister
+    given: SM
+  - family: Campbell
+    given: PJ
+  - family: Stratton
+    given: MR
+  container-title: Nature
+  id: Alex2013
+  issued:
+    month: 8
+    volume: 500
+    year: 2013
+  publisher: Nature Publishing Group
+  title: 'Signatures of Mutational Processes in Cancer'
+- author:
+  - family: Alexandrov
+    given: LB
+  - family: Kim
+    given: J
+  - family: Haradhvala
+    given: NJ
+  - family: Huang
+    given: MN
+  - family: Ng
+    given: AW
+  - family: Boot
+    given: A
+  - family: Covington
+    given: KR
+  - family: Gordenin
+    given: DA
+  - family: Bergstrom
+    given: E
+  - family: Lopez-Bigas
+    given: N
+  - family: Klimczak
+    given: LJ
+  - family: McPherson
+    given: JR
+  - family: Morganella
+    given: S
+  - family: Sabarinathan
+    given: R
+  - family: Wheeler
+    given: DA
+  - family: Mustonen
+    given: V
+  - family: Getz
+    given: G
+  - family: Rozen
+    given: SG
+  - family: Stratton
+    given: MR
+  container-title: bioarxiv
+  id: Alex2018
+  issued:
+    month: 05
+    year: 2018
+  publisher: bioarxiv
+  title: 'The Repertoire of Mutational Signatures in Human Cancer'
+- author:
+  - family: Rudin
+    given: Charles M.
+  - family: Durinck
+    given: Steffen
+  - family: Stawiski
+    given: Eric W.
+  - family: Poirier
+    given: John T.
+  - family: Modrusan
+    given: Zora
+  - family: Shames
+    given: David S.
+  - family: Bergbower
+    given: Emily A.
+  - family: Guan
+    given: Yinghui
+  - family: Shin
+    given: James
+  - family: Guillory
+    given: Joseph
+  - family: Rivers
+    given: Celina Sanchez
+  - family: Foo
+    given: Catherine K.
+  - family: Bhatt
+    given: Deepali
+  - family: Stinson
+    given: Jeremy
+  - family: Gnad
+    given: Florian
+  - family: Haverty
+    given: Peter M.
+  - family: Gentleman
+    given: Robert
+  - family: Chaudhuri
+    given: Subhra
+  - family: Janakiraman
+    given: Vasantharajan
+  - family: Jaiswal
+    given: Bijay S.
+  - family: Parikh
+    given: Chaitali
+  - family: Yuan
+    given: Wenlin
+  - family: Zhang
+    given: Zemin
+  - family: Koeppen
+    given: Hartmut
+  - family: Wu
+    given: Thomas D.
+  - family: Stern
+    given: Howard M.
+  - family: Yauch
+    given: Robert L.
+  - family: Huffman
+    given: Kenneth E.
+  - family: Paskulin
+    given: Diego D.
+  - family: Illei
+    given: Peter B.
+  - family: Varella-Garcia
+    given: Marileila
+  - family: Gazdar
+    given: Adi F.
+  - family: De Sauvage
+    given: Frederic J.
+  - family: Bourgon
+    given: Richard
+  - family: Minna
+    given: John D.
+  - family: Brock
+    given: Malcolm V.
+  - family: Seshagiri
+    given: Somasekar
+  container-title: Nature Genetics
+  id: Rudin2012
+  issued:
+    month: 10
+    volume: 44
+    year: 2012
+  publisher: Nature Publishing Group
+  title: 'Comprehensive genomic analysis identifies SOX2 as a frequently amplified gene in small-cell lung cancer'
+---
+
+  
+```{r load_style, warning=FALSE, message=FALSE, results="hide"}
+library(BiocStyle)
+```
+
+```{r packages, include=FALSE}
+library(YAPSA)
+library(Biostrings)
+library(BSgenome.Hsapiens.UCSC.hg19)
+library(knitr)
+opts_chunk$set(echo=TRUE)
+opts_chunk$set(fig.show='asis')
+```
+
+# Introduction {#introduction}
+
+The usage of YAPSA for Whole Genome Sequencing (WGS) data has been described in 
+detail in the preceding vignettes, with an introduction and an overview of the 
+general framework in [1. Usage of YAPSA](http://bioconductor.org/packages/3.11/bioc/vignettes/YAPSA/inst/doc/YAPSA.html).
+YAPSA can also be applied to Whole Exome Sequencing (WES) data, however, a few 
+caveats apply and a few steps have to be followed. These are described in this 
+vignette.
+
+The most important difference between WGS and WES analyses is the frequency of 
+occurrence of the different k-mers. According to the concept detailed in 
+[@Alex2013] and [@Alex2018], SNV mutational signatures use the triplet (or 
+3-mer) context of an SNV for categorization of the mutations, leading to 96 
+different categories or features. These 96 different feature don't occur with 
+the same frequency in the human genome. They don't occur with the same 
+frequency in the exome either, but more importantly, the relative occurrence 
+differs between WGS and WES. More precisely, let $n_{X}^{WGS}$ denote the 
+occurrence of feature $X$ in the whole genome and $n_{X}^{WES}$ denote the 
+occurrence of $X$ in an exome target capture. We then furthermore denote
+
+(@ratio_definition) $$
+q_{X}^{WGS,WES} = \frac{n_{X}^{WGS}}{n_{X}^{WES}}
+$$
+
+to be the ratio of these two counts. Even though on average across all features, 
+these ratios may vary around a value of $50$, because the genome is roughly 
+$50$ times bigger than the exome, the ratios need not be identical for all 
+features, i.e.,
+
+(@inequalityOfRatios_formula) $$
+\exists X,Y\in\mathbb{F}: q_{X}^{WGS,WES} \neq q_{Y}^{WGS,WES}
+$$
+
+where $\mathbb{F}$ denotes the feature space. It is thus crutial to compute 
+$q_{X}^{WGS,WES}$ for all features $X\in\mathbb{F}$ and to correct for these 
+differences. These corrections can be applied either to the signatures, 
+converting them to "exome signatures", or the inverse corrections can be 
+applied to the mutational catalogs. In YAPSA, we opt for the second alternative, 
+as this keeps the function calls simple, analogous and very similar for 
+analyses of both WES and WGS data.
+
+Of note, different target capture kits are available in order to perform WES. 
+As these cover different genomic regions, for a given target capture kit $A$, 
+different correction factors $q_{X}^{WGS,WES_A}$ for all features have to be 
+computed. As detailed [below](#correctTargetCapture), YAPSA provides correction 
+factors for 8 different target capture kits and also one correction factor 
+directly derived from the gene model GENCODE 19 applied to the human reference 
+genome hs37d5.
+
+
+# Loading the data {#loadData}
+
+First of all, analogously to all other vignettes, we load the signature data 
+from the package:
+
+```{r, load_stored_sig_data}
+data(sigs)
+data(cutoffs)
+current_sig_df <- AlexInitialArtif_sig_df
+library(BSgenome.Hsapiens.UCSC.hg19)
+```
+
+For the purpose of analyzing exomes, a mutational catalog of small cell lung 
+cancer is stored in YAPSA. The data had originally been generated by 
+[@Rudin2012] and was used in the cross entity analysis in [@Alex2013]. The data 
+can be accessed as follows:
+
+```{r}
+data("smallCellLungCancerMutCat_NatureGenetics2012")
+```
+
+This creates a dataframe with name `exome_mutCatRaw_df` and 
+`r dim(exome_mutCatRaw_df)[1]` rows. It was originally generated by executing 
+the R code below (not evaluated in this vignette):
+
+```{r load_lymphoma_ftp, eval=FALSE}
+smallCellLungCancer_NatureGenetics2012_ftp_path <- paste0(
+  "ftp://ftp.sanger.ac.uk/pub/cancer/AlexandrovEtAl/",
+  "somatic_mutation_data/Lung Small Cell/",
+  "Lung Small Cell_clean_somatic_mutations_for_signature_analysis.txt")
+exome_vcf_like_df <- 
+  read.csv(file = smallCellLungCancer_NatureGenetics2012_ftp_path,
+           header=FALSE,sep="\t")
+names(exome_vcf_like_df) <- c("PID","TYPE","CHROM","START",
+                                       "STOP","REF","ALT","FLAG")
+exome_vcf_like_df <- subset(exome_vcf_like_df, TYPE == "subs",
+                            select = c(CHROM, START, REF, ALT, PID))
+names(exome_vcf_like_df)[2] <- "POS"
+exome_vcf_like_df <- translate_to_hg19(exome_vcf_like_df,"CHROM")
+word_length <- 3
+exome_mutCatRaw_list <- 
+  create_mutation_catalogue_from_df(
+    exome_vcf_like_df,
+    this_seqnames.field = "CHROM", this_start.field = "POS",
+    this_end.field = "POS", this_PID.field = "PID",
+    this_subgroup.field = "SUBGROUP",
+    this_refGenome = BSgenome.Hsapiens.UCSC.hg19,
+    this_wordLength = 3)
+exome_mutCatRaw_df <- as.data.frame(exome_mutCatRaw_list$matrix)
+```
+
+
+# Correcting for the target capture {#correctTargetCapture}
+
+We now have an example mutational catalog at hand for WES data. In order to 
+perform a correction for the different triplet content between WGS and WES, 
+YAPSA provides correction factors, which can be brought to the R workspace as 
+follows:
+
+```{r load_correctionFactors}
+data(targetCapture_cor_factors)
+```
+
+As outlined in the [introduction](#introduction), different target capture kits 
+require different correction factors. The sets of available correction factors 
+can be accessed by the names of the loaded object:
+
+```{r list_correctionFactors}
+names(targetCapture_cor_factors)
+```
+
+We now have everything at hand which is needed to correct for the triplet 
+content. As described [above](#loadData), the data was accessed via links 
+provided in [@Alex2013], however, the data had originally been generated for 
+another publication: [@Rudin2012]. As described there, the target capture kit 
+*Agilent SureSelect all exon* was used, and we will use the correction factors 
+computed for this very kit. The function to be used in YAPSA for such a 
+correction is called `normalizeMotifs_otherRownames()`:
+
+```{r correct_targetCapture}
+targetCapture <- "AgilentSureSelectAllExon"
+cor_list <- targetCapture_cor_factors[[targetCapture]]
+corrected_catalog_df <- normalizeMotifs_otherRownames(exome_mutCatRaw_df,
+                                                        cor_list$rel_cor)
+```
+
+Of note, the corrected mutational catalog need not contain exclusively integer 
+numbers any more, it may contain floating point numbers due to the values of 
+$q_{X}^{WGS,WES}$.
+
+
+# Performing the analysis of mutational signatures
+
+After having performed the corrected with the factors $q_{X}^{WGS,WES}$ as 
+shown above, the analysis of mutational signatures is completely analogous to 
+the steps already described multiple times in the other vignettes. However, the 
+choice of optimal signature-specific cutoffs is slightly different:
+
+```{r optimal cutoffs}
+data(cutoffs)
+current_cutoff_vector <- cutoffCosmicValid_rel_df[6,]
+```
+
+```{r LCD with cutoffs}
+exome_listsList <-
+  LCD_complex_cutoff_combined(
+      in_mutation_catalogue_df = corrected_catalog_df,
+      in_cutoff_vector = current_cutoff_vector, 
+      in_signatures_df = AlexCosmicValid_sig_df, 
+      in_sig_ind_df = AlexCosmicValid_sigInd_df)
+```
+
+As we don't have any information about subgroups in this example, we omit this 
+and proceed directly with plotting the results:
+
+```{r exposures_cutoffs, warning=FALSE, fig.width=8, fig.height=6}
+exposures_barplot(
+  in_exposures_df = exome_listsList$cohort$exposures,
+  in_signatures_ind_df = exome_listsList$cohort$out_sig_ind_df)         
+```
+
+Of note, this cohort is strongly affected by signature AC4 (associated with the 
+main carcinogens in tobacco smoke).
+
+
+# References
+
+

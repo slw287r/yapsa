@@ -1,0 +1,23 @@
+#' @import utils
+if(getRversion() >= "3.6.0") 
+  utils::globalVariables(c("cutoffCosmicValid_abs_df",
+                           "cutoffCosmicValid_rel_df",
+                           "cutoffCosmicArtif_abs_df",
+                           "cutoffCosmicArtif_rel_df",
+                           "cutoffPCAWG_SBS_WGSWES_realPid_df",
+                           "cutoffPCAWG_ID_WGS_Pid_df", 
+                           "PCAWG_SP_SBS_sigs_Real_df", 
+                           "PCAWG_SP_SBS_sigInd_Real_df", 
+                           "PCAWG_SP_ID_sigs_df", 
+                           "PCAWG_SP_ID_sigInd_df", 
+                           "AlexCosmicValid_sig_df",
+                           "AlexCosmicValid_sigInd_df",
+                           "AlexCosmicArtif_sig_df",
+                           "AlexCosmicArtif_sigInd_df",
+                           "AlexCosmicArtif_sig_df",
+                           "exposure",
+                           "sig", 
+                           "lower",
+                           "relLower", 
+                           "upper", 
+                           "relUpper"))

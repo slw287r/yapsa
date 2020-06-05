@@ -1,0 +1,620 @@
+---
+title: "5. Indel signature analysis"
+author: "Lea Jopp-Saile and Daniel Huebschmann"
+date: "28/01/2019"
+vignette: >
+  %\VignetteIndexEntry{5. Indel signature analysis}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}  
+output: 
+  BiocStyle::html_document:
+    toc: yes
+
+references:
+- author:
+  - family: Alexandrov
+    given: LB
+  - family: Nik-Zainal
+    given: S
+  - family: Wedge
+    given: DC
+  - family: Aparicio
+    given: SA
+  - family: Behjati
+    given: S
+  - family: Biankin
+    given: AV
+  - family: Bignell
+    given: GR
+  - family: Bolli
+    given: N
+  - family: Borg
+    given: A
+  - family: Borresen-Dale
+    given: AL
+  - family: Boyault
+    given: S
+  - family: Burkhardt
+    given: B
+  - family: Butler
+    given: AP
+  - family: Caldas
+    given: C
+  - family: Davies
+    given: HR
+  - family: Desmedt
+    given: C
+  - family: Eils
+    given: R
+  - family: Eyfjörd
+    given: JE
+  - family: Greaves
+    given: M
+  - family: Hosoda
+    given: F
+  - family: Hutter
+    given: B
+  - family: Ilicic
+    given: T
+  - family: Imbeaud
+    given: S
+  - family: Imielinski
+    given: M
+  - family: Jäger
+    given: N
+  - family: Jones
+    given: DT
+  - family: Jones
+    given: D
+  - family: Knappskog
+    given: S
+  - family: Kool
+    given: M
+  - family: Lakhani
+    given: SR
+  - family: Lopez-Otin
+    given: C
+  - family: Martin
+    given: S
+  - family: Munshi
+    given: NC
+  - family: Nakamura
+    given: H
+  - family: Northcott
+    given: PA
+  - family: Pajic
+    given: M
+  - family: Papaemmanuil
+    given: E
+  - family: Paradiso
+    given: A
+  - family: Pearson
+    given: JV
+  - family: Puente
+    given: XS
+  - family: Raine
+    given: K
+  - family: Ramakrishna
+    given: M
+  - family: Richardson
+    given: AL
+  - family: Richter
+    given: J
+  - family: Rosenstiel
+    given: P
+  - family: Schlesner
+    given: M
+  - family: Schumacher
+    given: TN
+  - family: Span
+    given: PN
+  - family: Teague
+    given: JW
+  - family: Tokoti
+    given: Y
+  - family: Tutt
+    given: AN
+  - family: Valdes-Mas
+    given: R
+  - family: van Buuren
+    given: MM
+  - family: van't Veer
+    given: L
+  - family: Vincent-Salomon
+    given: A
+  - family: Waddell
+    given: N
+  - family: Yates
+    given: LR
+  - family: Australian Pancreatic Cancer Initiative
+    given: 
+  - family: ICGC Breast Cancer Consortium
+    given: 
+  - family: ICGC MMML-Seq Consortium
+    given: 
+  - family: ICGC PedBrain
+    given: 
+  - family: Zucman-Rossi
+    given: J
+  - family: Futreal
+    given: PA
+  - family: McDermott
+    given: U
+  - family: Lichter
+    given: P
+  - family: Meyerson
+    given: M
+  - family: Grimmond
+    given: SM
+  - family: Siebert
+    given: R
+  - family: Campo
+    given: E
+  - family: Shibata
+    given: T
+  - family: Pfister
+    given: SM
+  - family: Campbell
+    given: PJ
+  - family: Stratton
+    given: MR
+  container-title: Nature
+  id: Alex2013
+  issued:
+    month: 08
+    volume: 500
+    year: 2013
+  publisher: Nature Publishing Group
+  title: 'Signatures of Mutational Processes in Cancer'
+- author:
+  - family: Alexandrov
+    given: LB
+  - family: Kim
+    given: J
+  - family: Haradhvala
+    given: NJ
+  - family: Huang
+    given: MN
+  - family: Ng
+    given: AW
+  - family: Boot
+    given: A
+  - family: Covington
+    given: KR
+  - family: Gordenin
+    given: DA
+  - family: Bergstrom
+    given: E
+  - family: Lopez-Bigas
+    given: N
+  - family: Klimczak
+    given: LJ
+  - family: McPherson
+    given: JR
+  - family: Morganella
+    given: S
+  - family: Sabarinathan
+    given: R
+  - family: Wheeler
+    given: DA
+  - family: Mustonen
+    given: V
+  - family: Getz
+    given: G
+  - family: Rozen
+    given: SG
+  - family: Stratton
+    given: MR
+  container-title: bioarxiv
+  id: Alex2018
+  issued:
+    month: 05
+    year: 2018
+  publisher: bioarxiv
+  title: 'The Repertoire of Mutational Signatures in Human Cancer'
+- author:
+  - family: Alexandrov
+    given: LB
+  - family: Nik-Zainal
+    given: S
+  - family: Wedge
+    given: DC
+  - family: Campbell
+    given: PJ
+  - family: Stratton
+    given: MR
+  container-title: Cell Reports
+  id: Alex_CellRep2013
+  issued:
+    year: 2013
+  title: > 
+    Deciphering signatures of mutational processes operative in human cancer
+- author:
+  - family: Sing
+    given: Tobias
+  - family: Sander
+    given: Oliver
+  - family: Beerenwinkel
+    given: Niko
+  - family: Lengauer
+    given: Thomas
+  container-title: Bioinfomatics
+  id: ROCR_package2005
+  issued:
+      year: 2005
+  title: >
+    ROCR: visualizing classifier performance in R
+---
+
+```{r load_style, warning=FALSE, echo=FALSE, message=FALSE, results="hide"}
+library(BiocStyle)
+```
+
+```{r packages, include=FALSE}
+library(YAPSA)
+library(Biostrings)
+library(BSgenome.Hsapiens.UCSC.hg19)
+library(knitr)
+opts_chunk$set(echo=TRUE)
+opts_chunk$set(fig.show='asis')
+```
+
+# Introduction: PCAWG signatures {#introduction}
+
+In May 2018 a new and extended set of mutational signatures was published as a 
+preprint by the Pan-Cancer Analysis of Whole Genomes (PCAWG) consortium 
+[@Alex2018]. In the following, we refer to that set of signatures as the PCAWG 
+signatures. The underlying data is the largest available cohort of sequenced 
+(Whole Genome Sequencing (WGS) and Whole Exome Sequencing (WES)) cancer 
+samples to date and represents a substantial increase in statistical power as 
+compared to [@Alex2013] and [@Alex_CellRep2013]. On this data set, de novo 
+mutational signature discovery analysis was performed with two different 
+algorithms of the Non-negative Matrix Factorization (NMF) family of algorithms, 
+*SigPorfiler* and *SignatureAnalyzer* (Bayesian NMF). In total 65 SNV mutational 
+signatures (abbreciated SBS for single base substitution) were found, 49 of 
+which were called validated, either because of good consensus between the two 
+calling algorithms or because of presence in an orthogonal sequencing 
+technology. In addition to the SNV or SBS mutational signatures, that analysis 
+for the first time had sufficient statistical power to also extract 17 Indel 
+(ID) signatures, based on a classification of Indels into 83 features, and 
+Doublet Base Signatures (DBS) based on somatic di-nucleotide exchanges. In this 
+vignette, we present an example analysis with the new PCAWG Indel signatures. 
+The setup and line of arguments is analogous to the 
+[first vignette](http://bioconductor.org/packages/3.11/bioc/vignettes/YAPSA/inst/doc/YAPSA.html).
+However, YAPSA doesn't provide functions for DBS signatures as mutation counts 
+are often not sufficient for a deconvolution analysis.
+
+As for the [COSMIC SNV mutational signatures](http://bioconductor.org/packages/3.11/bioc/vignettes/YAPSA/inst/doc/YAPSA.html),
+the patterns for both the SNV and Indel PCAWG mutational signatures are stored 
+in the software package and can be loaded into the workspace as follows: 
+
+```{r load_PCAWG_sigs}
+data(sigs_pcawg)
+```
+
+For a precise description of all the data loaded by the above command, please 
+refer to [2. Signature-specific cutoffs](http://bioconductor.org/packages/3.11/bioc/vignettes/YAPSA/inst/doc/vignette_signature_specific_cutoffs.html)
+
+
+# Classification of Indels
+
+A prerequisite for an analysis of Indel mutational signatures is a consistent 
+classification system of Indels. This is non-trivial and critically depends on 
+the choice of features, which have to include whether a given Indel is actually 
+an insertion or a deletion, the size of the Indel,as well as the motif context 
+in order to assess whether micro-homologies are present. In the classification 
+proposed by the PCAWG consortium there are 83 features in total, which form 
+five major groups: 
+
+1. Deletions of 1 bp C/(G) or T/(A) in a repetitive context. Taking into 
+account the motif context of the deletion, the mutational event is further 
+classified into categories of 1, 2, 3, 4, 5 or larger or equal to 6 identical
+nucleotide(s).
+1. Insertions of 1 bp C/(G) or T/(A) in a repetitive context. Taking into 
+account the motif context of the deletion, the mutational event is further 
+classified into categories of 0, 1, 2, 3, 4,  or larger or equal to 5
+identical nucleotide(s).
+1. Deletions of 2 bp, 3 bp, 4 bp or more or equal to 5 bp in a repetitive 
+context. Each deletion is classified in a context of 1, 2, 3, 4, 5 or larger
+or equal to 6 times the same motif.
+1. Insertions of 2 bp, 3 bp, 4 bp or more or equal to 5 bps in a repetitive 
+context.  Each deletion is classified in a context of 0, 1, 2, 3, 4 or larger 
+or equal to 5 times the same motif.
+1. Deletions of 2 bp, 3 bp, 4 bp or more or equal to 5 bp in a partially 
+repetitive context with microhomology at the breakpoints. This partially 
+repetitive context is defined by motif length of minus 1 bp, 2 bp, 3 bp, 4 bps 
+or more or equal to 5 bp, located before and after the break-points of the 
+deletion.
+
+Indel classifications in the range of 1 - 5 bp are assigned to individual 
+categories, while all variants larger than 5bp are considered as one category.
+Of note, microhomology is defined by partial sequence similarity between the 
+motif of the respective Indel and the immediate neighbouring sequence context. 
+In the following, we illustrate the microhomology classification with an 
+example. We take a deletion of the motif **ATGCGA**, being more than 5 bp in 
+length with microhomology, i.e., partially repetitive context of 4 bp at the 
+breakpoint junction with the motifs **ATGC** upstream and **GCGA** downstream 
+of the deletion. The annotated feature category is then **MH\_5+\_4bp**. 
+
+In YAPSA, the function `plotExchangeSpectra_indel()` can be used to plot the 
+nucleotide exchange spectra of samples and/or signatures. The representation is 
+analogous to the function `plotExchangeSpectra()` for SNV mutational signatures, 
+while the colors and feature annotation is taken from [@Alex2018].
+
+```{r caption_spectra, echo=FALSE}
+cap <-": Nucleotide exchange spectra of the Indel signatures ID3, associated 
+        with tobacco smoking, and ID6, related to deficiencies in homologous 
+        recombination repair."
+```
+
+```{r INDEL_sig_example, include=TRUE, fig.width=15, fig.height=6, fig.cap= cap}
+plotExchangeSpectra_indel(PCAWG_SP_ID_sigs_df[,c(3,6)])
+```
+
+# PCAWG Indel signatures
+
+The publication [@Alex2018] reports signatures decomposed with an NMF
+approach (*SigProfiler*) and a Bayesian NMF approach (*SignatureAnalyser*). It
+is worth noting that YAPSA only has mutational signatures decomposed with
+SigProfiler integrated so far, of which the validated signatures are also found
+with *SignatureAnalyser*. Signatures only decomposed with SignatureAnalyzer are
+not part of YAPSA. Signature ID15 was excluded as none of the samples had a
+contribution to this signature. For seven of the Indel signatures, underlying 
+mutational processes were asserted. Indel Signatures ID1 and ID2 can be found 
+across all entities, while others such as ID13 is associated with UV light 
+exposure and is found exclusively in melanoma (cf. @Alex2018).
+
+```{r INDEL_sig_info}
+current_caption <- paste0("Information on Indel mutational signatures.")
+if(!exists("repress_tables"))
+  kable(PCAWG_SP_ID_sigInd_df, row.names=FALSE, caption=current_caption)
+```
+
+# Example data: Genome of the Netherlands
+
+In order to demonstrate the functionalities of the Indel signature analysis 
+with YAPSA, a publicly available data set was chosen, the Genome of the 
+Netherlands
+(<http://www.nlgenome.nl/?page_id=9>) [release5](https://molgenis26.target.rug.nl/downloads/gonl_public/variants/release5/).
+The data set is not related to cancer and instead contains germline variation 
+in the genomes of the Dutch population. Hence no biological interpretation or 
+conclusion of this analysis with respect to mutational processes should be 
+made, it is of sole technical and demonstrative purpose.
+
+
+# Supervised Indel signature analysis
+
+## Loading example data
+
+We first load the example data, which is stored in the software package 
+YAPSA. The file $\texttt{GenomeOfNl_raw.rda}$ has been filtered to only contain 
+Indel variant calls.
+
+```{r load_GoNL}
+data(GenomeOfNl_raw)
+GenomeOfNl_raw <- GenomeOfNl_raw[, c(1,2,4,5)]
+```
+
+Optional columns are being removed from the loaded data, which results in a 
+vcf-like (analogous to the variant calling format) dataframe with 
+`r dim(GenomeOfNl_raw)[1]` variants.
+The binary file above was created with the following R code:
+
+```{r load_GoNL_raw}
+load_data_new <- FALSE
+if(load_data_new){
+  data <- data.frame(matrix(ncol = 8, nrow = 0))
+  for(index in seq_along(1:22)){
+              print(index)
+              temp <- tempfile()
+              file_path <- paste0("https://molgenis26.target.rug.nl/
+                                  downloads/gonl_public/variants/release5/
+                                  gonl.chr",
+                                  index, ".snps_indels.r5.vcf.gz")
+              download.file(file_path, temp)
+       
+              data <- rbind(data, read.table(gzfile(temp, paste0("gonl.chr",
+                                                    index,
+                                                    ".snps_indels.r5.vcf")),
+                                             header=FALSE, sep="\t", 
+                                             stringsAsFactors = FALSE))
+              data <- data[grep("INDEL", data$V8),]
+              unlink(temp)
+            
+  }
+  colnames(data) <- c("CHROM", "POS", "ID", "REF", "ALT", "QUAL", 
+                      "FILTER","INFO")
+
+  GenomeOfNl_raw <- data[, c(1,2,4,5)]
+}
+```
+
+The obtained dataframe will later be used it in order to build a mutational 
+catalog for supervised analysis of mutational signatures with PCAWG Indel 
+signatures.
+
+```{r shows_top_of_df, echo=FALSE}
+kable(head(GenomeOfNl_raw), caption="Head of VCF file 
+      containing the GoNL INDEL data")
+```
+
+## Data Preprocessing 
+
+`GenomeOfNl_raw` does not contain any patient identifier information. 
+For the purpose of demonstrating the use of YAPSA Indel signature analysis, 
+such an information on patient identity is necessary. To do so, 15 synthetic 
+patient identifiers (PIDs) were generated and 50 +/- 20 Indels per PID were 
+randomly sampled from the data frame `GenomeOfNl_raw`.
+
+```{r randomize_data_set, warning= FALSE}
+seed = 2
+set.seed(seed)
+number_of_indels <- sample(c(30:70), 15,  replace = TRUE)
+
+index=0
+seed=3
+set.seed(seed)
+vcf_like_indel_lists <- lapply(number_of_indels, function(size){
+  df_per_PID <- GenomeOfNl_raw[sample(nrow(GenomeOfNl_raw), size, 
+                                      replace = FALSE), ]
+  index <<- index+1
+  df_per_PID$PID <- rep(paste0("PID_", index), length(size))
+  df_PIDs <- df_per_PID[order(df_per_PID$CHROM),]
+  return(df_PIDs)
+  })
+
+vcf_like_indel_df <- do.call(rbind.data.frame, vcf_like_indel_lists)
+kable(head(vcf_like_indel_df), caption="Head of the vcf_like_df
+      containing the subsampled GoNL Indel data")
+```
+
+Using the artificial `vcf_like_df` created above as input, the function 
+`create_indel_mutation_catalogue_from_df()` then builds a mutational
+catalog $V^{INDEL}$ containing the absolute feature counts ($n$) for each
+patient. This functions is equivalent to the function
+`create_mutation_catalogue_from_df()` for SNV data. Besides the input of type 
+`vcf_like_df`, the function `create_indel_mutation_catalogue_from_df()` also 
+requires the Indel signatures (`PCAWG_SP_ID_sigs_df`) loaded previously into 
+the workspace.
+The function `create_create_indel_mutation_catalogue_from_df()` is a wrapper of 
+several other functions:
+
+1. `attribute_sequence_contex_indel()` the function annotates to the 
+`vcf_like_df` a sequence context of 10 bp down- and 60 bp upstream of every 
+Indel variant. Additionally, the information whether the variant is an 
+insertion or deletion and the length of the Indel is annotated to every Indel 
+mutation.
+1. `attribution_of_indels()` attributes each variant to one of the 83 classes of
+features 
+1. `create_indel_mut_cat_from_df()` carries out the counting in order to obtain 
+a mutational catalog with the dimensions $n \times m$.
+
+Please note that this pre-processing step takes longer than all other functions 
+in YAPSA and may be time limiting.
+
+```{r create_mutational_catalog, warning=FALSE}
+vcf_like_indel_trans_df <- translate_to_hg19(vcf_like_indel_df,"CHROM")
+mutational_cataloge_indel_df <- create_indel_mutation_catalogue_from_df(
+  in_dat = vcf_like_indel_trans_df,
+  in_signature_df = PCAWG_SP_ID_sigs_df)
+
+kable(head(mutational_cataloge_indel_df[,1:5]))
+```
+
+## LCD Analysis 
+
+The core function of YAPSA is the function `LCD` and its derived functions, 
+which perform supervised mutational signature analysis. Here we describe how 
+this class of functions has been extended in order to make this supervised 
+signature analysis available to Indel mutational signatures. As previously 
+described for 
+[SNV mutational signatures](http://bioconductor.org/packages/3.11/bioc/vignettes/YAPSA/inst/doc/YAPSA.html), 
+the deconvolution is based on a non-negative least squares (NNLS) algorithm. In 
+order to reduce false positive calls, 
+[signature-specific cutoffs](http://bioconductor.org/packages/3.11/bioc/vignettes/YAPSA/inst/doc/vignette_signature_specific_cutoffs.html) 
+were introduced in YAPSA. Signature-specific cutoffs
+are applied after a first decomposition with NNLS, and only signatures with 
+computed contributions higher than their signature-specific cutoff are used in 
+a second decomposition which then yields the exposure values. Signature-specific 
+cutoffs take the different detectability of signatures into account, reflected 
+by a lower signature-specific cutoff for signatures with a distinct pattern and 
+a higher signature-specific cutoff for signatures with broader patterns.
+
+Of note, mutational processes have been asserted to fractions of both the sets 
+of SNV and Indel mutational signatures. There are overlaps between the asserted 
+mutational processes, as some of them can indeed leave imprints on both the SNV 
+and Indel mutational landscapes. Combining the information extracted with an 
+analysis of mutational signatures from the different types of mutation may thus 
+increase discriminatory power.
+
+As described 
+[here](http://bioconductor.org/packages/3.11/bioc/vignettes/YAPSA/inst/doc/vignette_signature_specific_cutoffs.html), signature-specific cutoffs were trained in a modified 
+ROC analysis with the package `r CRANpkg("ROCR")` [@ROCR_package2005] using the 
+results of the unsupervised discovery analysis as training data. As for the SNV 
+mutational signatures, signature-specific cutoffs are stored in dataframes 
+within the software package and can be loaded into the workspace:
+
+```{r load_cutoffs, warning=FALSE}
+data(cutoffs_pcawg)
+```
+
+As described in 
+[2. Signature-specific cutoffs](http://bioconductor.org/packages/3.11/bioc/vignettes/YAPSA/inst/doc/vignette_signature_specific_cutoffs.html), the modified ROC analyses are parametrized by 
+defining cost terms for punishing false-negative ($cost_{FN}$) and 
+false-positive ($cost_{FP}$) findings separately, but the shape and minima of 
+the cost functions depend only on the ratio between the cost for a 
+false-negative finding divided by the cost for a false positive finding, the 
+$cost_{factor}$ ($cost_{factor} = cost_{FN}/cost_{FP}$). Therefore, there is one 
+set of optimal signature-specific cutoffs per chosen value of $cost_{factor}$.
+
+Optimal signature-specific cutoffs are stored in data frames within the software 
+package and can be loaded into the workspace as shown above. In these data 
+frames every row corresponds to a different value of $cost_{factor}$. For Indel
+signatures the optimal cost factor was identified to be 3, thus the third line 
+in `cutoffPCAWG_ID_WGS_Pid_df` can be chosen for analysis.
+
+```{r LCD_decompostion, warning=FALSE}
+current_catalogue_df <- mutational_cataloge_indel_df 
+current_sig_df <- PCAWG_SP_ID_sigs_df
+current_cutoff_pid_vector <- cutoffPCAWG_ID_WGS_Pid_df[3,]
+current_sigInd_df <- PCAWG_SP_ID_sigInd_df
+
+current_LCDlistsList <- LCD_complex_cutoff_combined(
+  current_catalogue_df,
+  current_sig_df,
+  in_cutoff_vector = current_cutoff_pid_vector,
+  in_filename = NULL,
+  in_method = "abs",
+  in_sig_ind_df = current_sigInd_df)
+
+current_consensus_LCDlist <- current_LCDlistsList$consensus
+if(!exists("repress_tables")) 
+  as.character(current_consensus_LCDlist$out_sig_ind_df$sig)
+```
+
+## Visualization
+
+The exposures, i.e., the contributions of the different signatures to the 
+mutational catalog of every sample, can be visualized with the function
+`exposures_barplot()`. All the functionalities which are available for
+SNV mutational signatures, such as the annotation of subgroups (cf. 
+[1. Usage of YAPSA](http://bioconductor.org/packages/3.11/bioc/vignettes/YAPSA/inst/doc/vignette_confidenceIntervals.html)) 
+are also available for the Indel mutational signatures.
+
+```{r caption_exposure, echo=FALSE}
+cap <- ":Exposures to Indel mutational signatures in the artificial data created 
+        by sampling GoNL variants. Exposures were obtained from
+        a decomposition with PCAWG Indel signatures as well as their signature
+        specific-cutoffs (cutoffPCAWG_ID_WGS_Pid_df)."
+```
+
+```{r plot_exposure, echo=TRUE, warning=FALSE, fig.width=15, fig.height=6, fig.cap= cap}
+exposures_barplot(current_LCDlistsList$perPID$exposures,
+                  current_LCDlistsList$perPID$out_sig_ind_df)
+```
+
+# Confidence Intervals
+
+In order to assess trustworthiness of the computed exposures, YAPSA provides 
+the calculation of confidence intervals (CIs). Analogously to 
+[CIs for SNV mutational signatures](http://bioconductor.org/packages/3.11/bioc/vignettes/YAPSA/inst/doc/YAPSA.html), 
+the CIs for Indel mutational signatures are computed using the concept of 
+profile likelihood.
+
+```{r caption_CI, echo=FALSE}
+cap <- "Confidence interval calculation for exposures to Indel mutational 
+        signatures"
+```
+
+```{r CI, echo=TRUE, warning=FALSE, fig.width=17, fig.height=15, fig.cap=cap}
+confidence_intervals_ID <- confidence_indel_only_calulation(
+  in_current_indel_df = current_catalogue_df)
+plot(confidence_intervals_ID$p_complete_PCAWG_ID)
+```
+
+Note: With `confidence_indel_only_calulation()` only for INDELs the confidence
+intervals are calculated. To calculate the confidence intervals for SNVs and
+INDELs please use the function `confidence_indel_calulation()` and supply the 
+mutational catalogs of both SNV and INDEL counts.
+
+# References 
