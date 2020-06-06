@@ -50,12 +50,14 @@
 #' 
 makeVRangesFromDataFrame <- function(in_df,in_keep.extra.columns=TRUE,
                                     in_seqinfo=NULL,
+                                    in_refGenome=BSgenome.Hsapiens.UCSC.hg19,
                                     in_seqnames.field="X.CHROM",
                                     in_start.field="POS",
-                                    in_end.field="POS",in_PID.field="PID",
+                                    in_end.field="POS",
+                                    in_PID.field="PID",
                                     in_subgroup.field="subgroup",
                                     in_strand.field="strand",
-                                    verbose_flag=1) {
+                                    verbose_flag=0) {
     out_vr <- NULL
     name_list <- tolower(names(in_df))
     match_list <- c("ref","alt",tolower(in_seqnames.field),
@@ -207,9 +209,13 @@ makeVRangesFromDataFrame <- function(in_df,in_keep.extra.columns=TRUE,
 #' @importFrom SomaticSignatures motifMatrix
 #' @export
 #' 
-create_mutation_catalogue_from_VR <- function(in_vr,in_refGenome,in_wordLength,
-                                            in_PID.field="PID",in_verbose=0,
-                                            in_rownames=c(),adapt_rownames=1){
+create_mutation_catalogue_from_VR <- function(in_vr,
+											in_refGenome,
+											in_wordLength,
+											in_PID.field="PID",
+											in_verbose=0,
+                                            in_rownames=c(),
+											adapt_rownames=1){
     # adapt levels of in_PID.field
     PID_index <- which(names(mcols(in_vr))==in_PID.field)
     names(mcols(in_vr))[PID_index] <- "PID"
@@ -360,13 +366,14 @@ create_mutation_catalogue_from_VR <- function(in_vr,in_refGenome,in_wordLength,
 #' 
 create_mutation_catalogue_from_df <- function(this_df,
                                         this_refGenome_Seqinfo=NULL,
+                                        this_refGenome=BSgenome.Hsapiens.UCSC.hg19,
                                         this_seqnames.field="X.CHROM",
                                         this_start.field="POS",
                                         this_end.field="POS",
                                         this_PID.field="PID",
                                         this_subgroup.field="subgroup",
-                                        this_refGenome,this_wordLength,
-                                        this_verbose=1,
+                                        this_wordLength,
+                                        this_verbose=0,
                                         this_rownames=c(),
                                         this_adapt_rownames=1) {
     if(is.null(this_refGenome_Seqinfo)){
@@ -375,6 +382,7 @@ create_mutation_catalogue_from_df <- function(this_df,
     my_vr <- makeVRangesFromDataFrame(this_df,
                                     in_keep.extra.columns=TRUE,
                                     in_seqinfo=this_refGenome_Seqinfo,
+                                    in_refGenome=this_refGenome,
                                     in_seqnames.field=this_seqnames.field,
                                     in_start.field=this_start.field,
                                     in_end.field=this_end.field,
@@ -382,12 +390,12 @@ create_mutation_catalogue_from_df <- function(this_df,
                                     in_subgroup.field=this_subgroup.field,
                                     verbose_flag=this_verbose)
     my_result_list <- create_mutation_catalogue_from_VR(my_vr,
-                                                this_refGenome,
-                                                this_wordLength,
-                                                this_PID.field,
-                                                this_verbose,
-                                                this_rownames,
-                                                this_adapt_rownames)
+                                                in_refGenome=this_refGenome,
+                                                in_wordLength=this_wordLength,
+                                                in_PID.field=this_PID.field,
+                                                in_verbose=this_verbose,
+                                                in_rownames=this_rownames,
+                                                adapt_rownames=this_adapt_rownames)
     return(my_result_list)
 }
 
@@ -721,13 +729,14 @@ stratify_and_create_mutational_catalogue <-
         temp_name <- name_list[[i]]
         temp_results_list <- create_mutation_catalogue_from_df(
             temp_table,
-            our_refGenome_Seqinfo,
+            this_refGenome_Seqinfo=our_refGenome_Seqinfo,
+            this_refGenome=our_refGenome,
             this_seqnames.field=our_seqnames.field,
             this_start.field=our_start.field,
             this_end.field=our_end.field,
             this_PID.field=our_PID.field,
             this_subgroup.field=our_subgroup.field,
-            our_refGenome,our_wordLength,in_verbose,
+            our_wordLength,in_verbose,
             our_rownames)
         if(!is.null(strata_target_dir)) {
             temp_matrix <- temp_results_list$matrix

@@ -18,19 +18,20 @@
 #' library(Biostrings)
 #' library(BSgenome.Hsapiens.UCSC.hg19)
 #'
-#' sequence_context <- getSequenceContext(position = 123456789, chr = "chr12",
+#' sequence_context <- getSequenceContext(refGenome = BSgenome.Hsapiens.UCSC.hg19,
+#'                                        position = 123456789, chr = "chr12",
 #'                                        offsetL= 10, offsetR=50)
 #' sequence_context
 #' 
-getSequenceContext <- function(position, chr, offsetL= 10, offsetR=50){
+getSequenceContext <- function(refGenome, position, chr, offsetL= 10, offsetR=50){
   if(is.numeric(chr)){
     chr <- paste0("chr", chr)
-    sequence <- getSeq(Hsapiens, chr, position-offsetL, position+offsetR)
+    sequence <- getSeq(refGenome, chr, position-offsetL, position+offsetR)
     context_string <- as.character(sequence)
     sequenceContext <- list(sequence=sequence,context_string=context_string)
     return(sequenceContext)
   }else{
-    sequence <- getSeq(Hsapiens, chr, position-offsetL, position+offsetR)
+    sequence <- getSeq(refGenome, chr, position-offsetL, position+offsetR)
     context_string <- as.character(sequence)
     sequenceContext <- list(sequence=sequence,context_string=context_string)
     return(sequenceContext)
@@ -73,13 +74,16 @@ getSequenceContext <- function(position, chr, offsetL= 10, offsetR=50){
 #'                                    in_offsetL= 10, in_offsetR=50)
 #' GenomeOfNl_context
 #' 
-attribute_sequence_contex_indel <- function(in_dat, in_REF.field = "REF",
+attribute_sequence_contex_indel <- function(in_dat,
+                                                 in_refGenome = BSgenome.Hsapiens.UCSC.hg19,
+                                                 in_REF.field = "REF",
                                                  in_ALT.field = "ALT",
                                                  in_verbose = FALSE, 
                                                  in_offsetL= 10,
                                                  in_offsetR=50) {
-  print(paste("Indel sequence context attribution of total ", dim(in_dat)[1],
-              " indels. This could take a while..."))
+	if(in_verbose)
+		print(paste("Indel sequence context attribution of total ", dim(in_dat)[1],
+              " indels. This could take a while..."));
   name_list <- names(in_dat)
   ## exception handling for input fields
   if(tolower(in_REF.field) %in% tolower(name_list)){
@@ -109,14 +113,16 @@ attribute_sequence_contex_indel <- function(in_dat, in_REF.field = "REF",
      alt_length <- length(unlist(strsplit(in_dat$ALT[index], split="")))
      if(ref_length > alt_length){
        in_dat$Type[index] <- "Del"
-       context_list <- getSequenceContext(position = in_dat$POS[index],
+       context_list <- getSequenceContext(refGenome = in_refGenome,
+										  position = in_dat$POS[index],
                                           chr = in_dat$CHROM[index],
                                           offsetL= in_offsetL,
                                           offsetR= in_offsetR)
        in_dat$SequenceContext[index] <- context_list$context_string
      }else{
        in_dat$Type[index] <- "Ins"
-       context_list <- getSequenceContext(position = in_dat$POS[index],
+       context_list <- getSequenceContext(refGenome = in_refGenome,
+										  position = in_dat$POS[index],
                                           chr = in_dat$CHROM[index],
                                           offsetL= in_offsetL,
                                           offsetR= in_offsetR)
@@ -179,8 +185,8 @@ attribute_sequence_contex_indel <- function(in_dat, in_REF.field = "REF",
 #' GenomeOfNl_classified
 #' 
 attribution_of_indels <-function(in_dat_return = in_dat_return){ 
-  print(paste("INDEL classification of total ", dim(in_dat_return)[1],
-              " INDELs This could take a while..."))
+  #print(paste("INDEL classification of total ", dim(in_dat_return)[1],
+  #            " INDELs This could take a while..."))
   for(indel in c(1:dim(in_dat_return)[1])){
     sequence_string <- DNAString(in_dat_return$SequenceContext[indel])
     if(in_dat_return$Differnce[indel]+11 > 61){
@@ -1117,11 +1123,13 @@ create_indel_mut_cat_from_df <- function(in_df, in_signatures_df){
 #' 
 create_indel_mutation_catalogue_from_df <- function(in_dat, 
                                                     in_signature_df, 
+													in_refGenome=BSgenome.Hsapiens.UCSC.hg19,
                                                     in_REF.field="REF",
                                                     in_ALT.field="ALT",
                                                     in_verbose = FALSE){
   indel_context_atrribution <- attribute_sequence_contex_indel(
     in_dat, 
+	in_refGenome=in_refGenome,
     in_REF.field=in_REF.field,
     in_ALT.field=in_ALT.field, 
     in_verbose = FALSE)
